@@ -1,13 +1,13 @@
 import config from "../config"
 import canvasAbstract from "./canvasAbstract"
-import Straw from "../model/Straw"
+import Water from "../model/Water"
 
-class straw extends canvasAbstract implements ICanvas {
+class water extends canvasAbstract implements ICanvas {
     num(): number {
-        return config.straw.num
+        return config.water.num
     }
     model(): ModelConstructor {
-        return Straw
+        return Water
     }
     constructor() {
         super()
@@ -19,4 +19,4 @@ class straw extends canvasAbstract implements ICanvas {
 
 }
 
-export default new straw()
+export default new water()

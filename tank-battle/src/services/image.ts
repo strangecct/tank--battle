@@ -1,3 +1,4 @@
+// 加载图像数据的程序
 import config from "../config"
 
 type mapKey = keyof typeof config.images
@@ -10,7 +11,7 @@ export const promiseImgs = Object.entries(config.images).map(([key, val]) => {
         img.src = val
         img.onload = () => {
             imageMap.set(key as mapKey, img)
-            // 加载完后放到iamge里面
+            // 加载完后放到image里面
             resolve(img)
         }
     })
