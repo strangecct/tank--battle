@@ -4,16 +4,18 @@ import position from "../services/position";
 
 
 export default abstract class canvasAbstract {
-    protected models: IModel[] = []
+    public models: IModel[] = []
 
     abstract num(): number
-    abstract model(): ModelConstructor
+    abstract model(): ModelConstructor | BulletConstructor
     abstract render(): void
 
+
     constructor(
+        protected name: string,
         protected box = document.querySelector('#app')!,
         protected el = document.createElement('canvas'),
-        protected canvas = el.getContext('2d')!
+        public canvas = el.getContext('2d')!
     ) {
         this.createCanvas();
     }
@@ -22,9 +24,8 @@ export default abstract class canvasAbstract {
     protected createCanvas() {
         this.el.width = config.canvas.width;
         this.el.height = config.canvas.height;
-        // this.canvas.fillStyle = '#222'
-        // this.canvas.fillRect(0, 0, config.canvas.width, config.canvas.height)
-        this.box.insertAdjacentElement('afterbegin', this.el)
+        this.el.setAttribute('name', this.name)
+        this.box.insertAdjacentElement('beforeend', this.el)
     }
 
     // 由子类调用的绘制数组到画布的函数，-> 优化为仅生成模型到数组中 
@@ -35,23 +36,25 @@ export default abstract class canvasAbstract {
             // this.canvas.drawImage(imageMap.get(model)!,
             //     position.x, position.y, config.model.width, config.model.height)
             // 也不直接在这里渲染，进一步优化结构
-            const instance = new (this.model())(this.canvas, position);
+            const model = this.model() as ModelConstructor
+            const instance = new model(position);
             this.models.push(instance)
-            // instance.render() //这里也不要直接渲染
         })
     }
 
     //将模型的创建和渲染分开
-    protected renderModels() {
+    public renderModels() {
         this.canvas.clearRect(0, 0, config.canvas.width, config.canvas.height)
         this.models.forEach(model => {
             model.render()
         })
     }
-    //  
-    // protected removeModel() {
 
-    // }
+
+    public removeModel(model: IModel) { //必须要共有属性才能继承到子类，被ICanvas检测到
+        this.models = this.models.filter(m => m !== model)
+        // 把发生碰撞的模型删掉就行了
+    }
 
 
 }

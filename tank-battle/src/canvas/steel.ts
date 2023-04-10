@@ -3,16 +3,14 @@ import canvasAbstract from "./canvasAbstract"
 import Steel from "../model/Steel"
 
 class steel extends canvasAbstract implements ICanvas {
+
     num(): number {
         return config.steel.num
     }
     model(): ModelConstructor {
         return Steel
     }
-    // constructor() {
-    //     super()
-    //     super.createModels()
-    // }
+
     render(): void {
         super.createModels()
         super.renderModels();
@@ -20,4 +18,4 @@ class steel extends canvasAbstract implements ICanvas {
 
 }
 
-export default new steel()
+export default new steel('steel')
